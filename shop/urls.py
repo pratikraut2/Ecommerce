@@ -2,24 +2,25 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # Product Routes
-    path('api/products/', views.product_list, name='product_list'),
-    path('api/products/<int:pk>/', views.product_detail, name='product_detail'),
+    # products & categories
+    path("products/", views.product_list, name="product-list"),
+    path("products/<int:pk>/", views.product_detail, name="product-detail"),
+    path("categories/", views.category_list, name="category-list"),
 
-    # Cart Routes
-    path('api/cart/', views.cart_detail, name='cart_detail'),
-    path('api/cart/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
-    path('api/cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    # cart
+    path("cart/", views.cart_detail, name="cart-detail"),
+    path("cart/add/<int:product_id>/", views.add_to_cart, name="cart-add"),
+    path("cart/remove/<int:item_id>/", views.remove_from_cart, name="cart-remove"),
 
-    # Order Routes
-    path('api/orders/', views.create_order, name='create_order'),
-    path('api/orders/<int:order_id>/', views.order_detail, name='order_detail'),
+    # orders
+    path("orders/create/", views.create_order, name="order-create"),
+    path("orders/<int:order_id>/", views.order_detail, name="order-detail"),
+    path("orders/<int:order_id>/pay/", views.order_pay, name="order-pay"),
 
-    # Auth Routes
-    path('api/auth/signup/', views.signup, name='signup'),
-    path('api/auth/login/', views.login_view, name='login'),
-    path('api/auth/logout/', views.logout_view, name='logout'),
-    path('api/auth/profile/', views.profile, name='profile'),
+    # stripe webhook (public)
+    path("stripe/webhook/", views.stripe_webhook, name="stripe-webhook"),
+
+    # auth
+    path("auth/signup/", views.signup, name="signup"),
+    path("auth/profile/", views.profile, name="profile"),
 ]
-
-    
