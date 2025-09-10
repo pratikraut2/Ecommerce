@@ -1,5 +1,8 @@
 from django.urls import path
 from . import views
+from .views import SignupView, LoginView, ProfileView
+from rest_framework_simplejwt.views import TokenRefreshView
+
 
 urlpatterns = [
     # products & categories
@@ -21,6 +24,9 @@ urlpatterns = [
     path("stripe/webhook/", views.stripe_webhook, name="stripe-webhook"),
 
     # auth
-    path("auth/signup/", views.signup, name="signup"),
-    path("auth/profile/", views.profile, name="profile"),
+    path("auth/signup/", SignupView.as_view(), name="signup"),
+    path("auth/login/", LoginView.as_view(), name="login"),
+    path("auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("auth/profile/", ProfileView.as_view(), name="profile"),
+    
 ]

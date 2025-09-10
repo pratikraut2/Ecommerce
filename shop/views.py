@@ -187,21 +187,72 @@ def stripe_webhook(request):
 
 
 # ---------- Auth: signup & profile ----------
-@api_view(["POST"])
-@permission_classes([AllowAny])
-def signup(request):
-    username = request.data.get("username")
-    email = request.data.get("email", "")
-    password = request.data.get("password")
-    if not username or not password:
-        return Response({"detail": "username & password required"}, status=status.HTTP_400_BAD_REQUEST)
-    if User.objects.filter(username=username).exists():
-        return Response({"detail": "username taken"}, status=status.HTTP_400_BAD_REQUEST)
-    user = User.objects.create_user(username=username, email=email, password=password)
-    return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.tokens import RefreshToken
+from .serializers import UserSerializer
+
+User = get_user_model()
 
 
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def profile(request):
-    return Response(UserSerializer(request.user).data)
+# ---------- Signup ----------
+class SignupView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get("username")
+        email = request.data.get("email", "")
+        password = request.data.get("password")
+
+        if not username or not password:
+            return Response({"detail": "username & password required"}, status=400)
+
+        if User.objects.filter(username=username).exists():
+            return Response({"detail": "username taken"}, status=400)
+
+        user = User.objects.create_user(username=username, email=email, password=password)
+
+        # Generate JWT tokens
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            "user": UserSerializer(user).data,
+            "access": str(refresh.access_token),
+            "refresh": str(refresh)
+        }, status=201)
+
+
+# ---------- Login ----------
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+
+        if not username or not password:
+            return Response({"detail": "username & password required"}, status=400)
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({"detail": "Invalid credentials"}, status=401)
+
+        if not user.check_password(password):
+            return Response({"detail": "Invalid credentials"}, status=401)
+
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            "user": UserSerializer(user).data,
+            "access": str(refresh.access_token),
+            "refresh": str(refresh)
+        })
+
+
+# ---------- Profile (protected) ----------
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response(UserSerializer(request.user).data)
