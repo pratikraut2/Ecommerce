@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'shop',
     'rest_framework',
     'corsheaders',
+    'import_export'
 ]
 
 MIDDLEWARE = [
