@@ -3,13 +3,17 @@ import axiosInstance from "./axios";
 
 // ✅ Signup
 export const signup = async (username, email, password) => {
-  const res = await axiosInstance.post("/signup/", { username, email, password });
+  const res = await axiosInstance.post("/auth/signup/", {
+    username,
+    email,
+    password,
+  });
   return res.data; // { user, access, refresh }
 };
 
 // ✅ Login
 export const login = async (username, password) => {
-  const res = await axiosInstance.post("/login/", { username, password });
+  const res = await axiosInstance.post("/auth/login/", { username, password });
 
   if (res.data.access) {
     localStorage.setItem("access", res.data.access);
@@ -21,7 +25,7 @@ export const login = async (username, password) => {
 
 // ✅ Get profile
 export const getProfile = async () => {
-  const res = await axiosInstance.get("/profile/");
+  const res = await axiosInstance.get("/auth/profile/");
   return res.data;
 };
 
