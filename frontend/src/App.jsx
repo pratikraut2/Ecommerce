@@ -1,46 +1,28 @@
-
-import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "./context/AuthContext";
-import { CartProvider } from "./context/CartContext";
-
-// Pages
+// App.jsx
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
-import ProductDetail from "./pages/ProductDetail";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-import Orders from "./pages/Orders";
-import Signup from "./pages/Signup";
-import Signin from "./pages/Signin";
-import Login from "./pages/Login";
-import Profile from "./pages/Profile";
-import NotFound from "./pages/not-found";
+// ... other pages
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <CartProvider>
-          <div className="min-h-screen bg-gray-50">
-            <Switch>
-              <Route path="/" component={Home} />
-              <Route path="/products" component={Products} />
-              <Route path="/product/:id" component={ProductDetail} />
-              <Route path="/cart" component={Cart} />
-              <Route path="/checkout" component={Checkout} />
-              <Route path="/orders" component={Orders} />
-              <Route path="/signup" component={Signup} />
-              <Route path="/signin" component={Signin} />
-              <Route path="/login" component={Login} />
-              <Route path="/profile" component={Profile} />
-              <Route component={NotFound} />
-            </Switch>
-          </div>
-        </CartProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <Footer />
+    </Router>
   );
 }
 
