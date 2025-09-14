@@ -1,3 +1,4 @@
+// src/pages/Home.jsx
 import React, { useEffect, useState } from "react";
 import { getProducts } from "../api/products";
 import ProductCard from "../components/ProductCard";
@@ -12,7 +13,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const data = await getProducts();
-        console.log("Fetched products:", data); // check API response
+        console.log("Fetched products:", data);
         setProducts(data);
         setFiltered(data);
       } catch (error) {
@@ -34,13 +35,18 @@ export default function Home() {
       );
   };
 
-  if (loading) return <p className="text-center p-10 text-gray-500">Loading products...</p>;
+  if (loading)
+    return (
+      <p className="text-center p-10 text-gray-500">Loading products...</p>
+    );
 
   return (
     <div className="p-6">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-blue-600">Welcome to MyShop</h1>
-        <p className="text-gray-600">Find the best products at the best prices!</p>
+        <p className="text-gray-600">
+          Find the best products at the best prices!
+        </p>
       </div>
 
       <SearchBar onSearch={handleSearch} />

@@ -1,3 +1,4 @@
+// src/pages/Products.jsx
 import { useEffect, useState } from "react";
 import { getProducts } from "../api/products";
 import ProductCard from "../components/ProductCard";
@@ -20,11 +21,16 @@ export default function Products() {
     fetchProducts();
   }, []);
 
-  if (loading) return <p className="text-center p-10 text-gray-500">Loading products...</p>;
+  if (loading)
+    return (
+      <p className="text-center p-10 text-gray-500">Loading products...</p>
+    );
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">All Products</h1>
+      <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">
+        All Products
+      </h1>
       {products.length === 0 ? (
         <p className="text-center text-gray-500">No products found.</p>
       ) : (
