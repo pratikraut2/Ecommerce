@@ -6,6 +6,12 @@ import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 // ... other pages
+import Cart from "./pages/Cart";             // <-- add this
+import Checkout from "./pages/Checkout";     // <-- add this
+import Login from "./pages/Login";           // <-- add this
+import Signup from "./pages/Signup";       // <-- add this
+import Profile from "./pages/Profile";       // <-- add this
+
 
 function App() {
   return (
@@ -18,9 +24,9 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="*" element={<NotFound />} />
+        
       </Routes>
       <Footer />
     </Router>

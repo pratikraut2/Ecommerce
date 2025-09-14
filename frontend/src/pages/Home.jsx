@@ -3,49 +3,48 @@ import { getProducts } from "../api/products";
 import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/SearchBar";
 
-const Home = () => {
+export default function Home() {
   const [products, setProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Load products on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getProducts();
+        console.log("Fetched products:", data); // check API response
         setProducts(data);
         setFiltered(data);
       } catch (error) {
         console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
   }, []);
 
-  // Search filter
   const handleSearch = (query) => {
-    if (!query) {
-      setFiltered(products);
-    } else {
+    if (!query) setFiltered(products);
+    else
       setFiltered(
         products.filter((p) =>
           p.name.toLowerCase().includes(query.toLowerCase())
         )
       );
-    }
   };
+
+  if (loading) return <p className="text-center p-10 text-gray-500">Loading products...</p>;
 
   return (
     <div className="p-6">
-      {/* Hero Section */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-blue-600">Welcome to MyShop</h1>
         <p className="text-gray-600">Find the best products at the best prices!</p>
       </div>
 
-      {/* Search */}
       <SearchBar onSearch={handleSearch} />
 
-      {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filtered.length > 0 ? (
           filtered.map((product) => (
@@ -59,6 +58,4 @@ const Home = () => {
       </div>
     </div>
   );
-};
-
-export default Home;
+}

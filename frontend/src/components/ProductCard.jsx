@@ -1,7 +1,7 @@
 export default function ProductCard({ product, onAddToCart }) {
   const handleAddToCart = () => {
-    onAddToCart(product);
-    console.log('Added to cart:', product); // todo: remove mock functionality
+    if (onAddToCart) onAddToCart(product);
+    console.log('Added to cart:', product);
   };
 
   return (
@@ -9,9 +9,8 @@ export default function ProductCard({ product, onAddToCart }) {
       <div className="relative aspect-square overflow-hidden">
         <img
           src={product.image}
-          alt={product.title}
+          alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-          data-testid={`img-product-${product.id}`}
         />
         {!product.inStock && (
           <span className="absolute top-2 right-2 bg-gray-200 text-gray-700 px-2 py-1 text-xs rounded-md">
@@ -20,14 +19,14 @@ export default function ProductCard({ product, onAddToCart }) {
         )}
       </div>
       <div className="p-4">
-        <h3 className="font-medium text-gray-900 mb-2 line-clamp-2" data-testid={`text-title-${product.id}`}>
-          {product.title}
+        <h3 className="font-medium text-gray-900 mb-2 line-clamp-2">
+          {product.name}
         </h3>
         <p className="text-gray-600 text-sm mb-2 line-clamp-2">
           {product.description}
         </p>
         <div className="flex items-center justify-between mb-4">
-          <span className="text-lg font-bold text-blue-600" data-testid={`text-price-${product.id}`}>
+          <span className="text-lg font-bold text-blue-600">
             ${product.price}
           </span>
           <span className="border border-gray-300 text-gray-600 px-2 py-1 text-xs rounded-md">
@@ -37,12 +36,11 @@ export default function ProductCard({ product, onAddToCart }) {
         <button
           onClick={handleAddToCart}
           className={`w-full py-2 px-4 rounded-md font-medium transition-colors duration-200 ${
-            product.inStock 
-              ? 'bg-blue-600 text-white hover:bg-blue-700' 
+            product.inStock
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
           }`}
           disabled={!product.inStock}
-          data-testid={`button-add-cart-${product.id}`}
         >
           {product.inStock ? 'Add to Cart' : 'Out of Stock'}
         </button>

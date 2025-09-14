@@ -1,40 +1,31 @@
-
 // src/api/auth.js
 import axiosInstance from "./axios";
 
-// ✅ POST /signup/ → create new user
+// ✅ Signup
 export const signup = async (username, email, password) => {
-  const res = await axiosInstance.post("/signup/", {
-    username,
-    email,
-    password,
-  });
-  return res.data; // returns { user, access, refresh }
+  const res = await axiosInstance.post("/signup/", { username, email, password });
+  return res.data; // { user, access, refresh }
 };
 
-// ✅ POST /login/ → authenticate user
+// ✅ Login
 export const login = async (username, password) => {
-  const res = await axiosInstance.post("/login/", {
-    username,
-    password,
-  });
+  const res = await axiosInstance.post("/login/", { username, password });
 
   if (res.data.access) {
-    // Store tokens in localStorage
     localStorage.setItem("access", res.data.access);
     localStorage.setItem("refresh", res.data.refresh);
   }
 
-  return res.data; // returns { user, access, refresh }
+  return res.data;
 };
 
-// ✅ GET /profile/ → get current logged-in user
+// ✅ Get profile
 export const getProfile = async () => {
   const res = await axiosInstance.get("/profile/");
-  return res.data; // returns user details
+  return res.data;
 };
 
-// ✅ Logout → just clear tokens (no backend call needed)
+// ✅ Logout
 export const logout = () => {
   localStorage.removeItem("access");
   localStorage.removeItem("refresh");

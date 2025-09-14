@@ -1,42 +1,30 @@
-// src/pages/Products.jsx
-import React, { useEffect, useState } from "react";
-import { getProducts } from "../api/products"; // your axios API call
+import { useEffect, useState } from "react";
+import { getProducts } from "../api/products";
 import ProductCard from "../components/ProductCard";
 
-function Products() {
+export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch products on mount
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await getProducts(); // fetch from backend
+        const data = await getProducts();
         setProducts(data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
+      } catch (err) {
+        console.error("Error fetching products:", err);
       } finally {
         setLoading(false);
       }
     };
-
     fetchProducts();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="text-center p-10 text-gray-500 text-lg">
-        Loading products...
-      </div>
-    );
-  }
+  if (loading) return <p className="text-center p-10 text-gray-500">Loading products...</p>;
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">
-        All Products
-      </h1>
-
+      <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">All Products</h1>
       {products.length === 0 ? (
         <p className="text-center text-gray-500">No products found.</p>
       ) : (
@@ -49,5 +37,3 @@ function Products() {
     </div>
   );
 }
-
-export default Products;
