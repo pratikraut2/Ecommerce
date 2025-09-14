@@ -5,59 +5,36 @@ import { login } from "../api/auth";
 export default function Login() {
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    username: "",
-    password: "",
-  });
+  const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Handle form input
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Handle login submit
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
-  try {
-    const res = await login(form.username, form.password);
-    if (res.access) {
-      navigate("/profile"); // redirect after login
+    try {
+      const data = await login(form.username, form.password);
+      console.log("Logged in:", data);
+      navigate("/profile"); // redirect to profile
+    } catch (err) {
+      setError(err.response?.data?.detail || "Invalid username or password");
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error("Login error:", err);
-
-    const detail = err.response?.data?.detail;
-    if (detail) {
-      setError(detail);
-    } else if (err.message) {
-      setError(err.message);
-    } else {
-      setError("Something went wrong. Please try again.");
-    }
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
-        {error && (
-          <div className="bg-red-100 text-red-700 p-2 rounded mb-4 text-sm">
-            {error}
-          </div>
-        )}
+        {error && <div className="bg-red-100 text-red-700 p-2 rounded mb-4 text-sm">{error}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
